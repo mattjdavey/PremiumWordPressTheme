@@ -1,6 +1,7 @@
-<h1>Premium Theme Options</h1>
+<h1>Premium Sidebar Options</h1>
 <?php settings_errors(); ?>
 <?php 
+    $picture = esc_attr( get_option( 'profile_picture' ) );
     $firstName = esc_attr( get_option( 'first_name' ) );
     $lastName = esc_attr( get_option( 'last_name' ) );
     $fullName = $firstName . ' ' . $lastName;
@@ -9,6 +10,9 @@
 
 <div class="premium-sidebar-preview">
     <div class="premium-sidbar">
+        <div class="image-container">
+            <div id="profile-picture-preview" class="profile-picture" style="background-image: url(<?php print $picture; ?>);"></div>
+        </div>
         <h1 class="premium-username"><?php print $fullName ?></h1>
         <h2 class="premium-description"><?php print $description ?></h2>
         <div class="icons-wrapper">

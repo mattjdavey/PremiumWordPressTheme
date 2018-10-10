@@ -12,8 +12,10 @@ function premium_add_admin_page() {
     dashicons-admin-generic', 100 );
 
     // Generate premium admin sub pages.
-    add_submenu_page('premium', 'Premium Theme Options', 'General', 'manage_options', 'premium', 'premium_theme_create_page');
+    add_submenu_page('premium', 'Premium Sidebar Options', 'Sidebar', 'manage_options', 'premium', 'premium_theme_create_page');
+    add_submenu_page('premium', 'Premium Theme Options', 'Theme Options', 'manage_options', 'premium_theme', 'premium_theme_support_page');
     add_submenu_page('premium', 'Premium CSS Options', 'Custom CSS', 'manage_options', 'premium_css', 'premium_theme_css_page');
+    
 
     // Activate custom settings.
     add_action( 'admin_init', 'premium_custom_settings' );
@@ -22,6 +24,8 @@ function premium_add_admin_page() {
 add_action( 'admin_menu', 'premium_add_admin_page' );
 
 function premium_custom_settings() {
+    // Sidebar options
+    register_setting( 'premium-settings-group', 'profile_picture' );
     register_setting( 'premium-settings-group', 'first_name' );
     register_setting( 'premium-settings-group', 'last_name' );
     register_setting( 'premium-settings-group', 'user_description' );
@@ -31,15 +35,51 @@ function premium_custom_settings() {
 
     add_settings_section('premium-sidebar-options', 'Sidebar Options', 'premium_sidebar_options', 'premium');
 
+    add_settings_field('sidebar-profile-picture', 'Profile Picture', 'premium_sidebar_profile', 'premium', 'premium-sidebar-options');
     add_settings_field('sidebar-name', 'Full Name', 'premium_sidebar_name', 'premium', 'premium-sidebar-options');
     add_settings_field('sidebar-description', 'Description', 'premium_sidebar_description', 'premium', 'premium-sidebar-options');
     add_settings_field('sidebar-twitter', 'Twitter Handler', 'premium_sidebar_twitter', 'premium', 'premium-sidebar-options');
     add_settings_field('sidebar-facebook', 'Facebook Handler', 'premium_sidebar_facebook', 'premium', 'premium-sidebar-options');
     add_settings_field('sidebar-gplus', 'Google+ Handler', 'premium_sidebar_gplus', 'premium', 'premium-sidebar-options');
+
+    // Theme support options.
+    register_setting( 'premium-theme-support', 'post_formats', 'premium_post_format_callback' );
+
+    add_settings_section('premium-theme-options', 'Theme Options', 'premium_theme_options', 'premium_theme');
+
+    add_settings_field( 'post-formats', 'Post Formats', 'premium_post_formats', 'premium_theme', 'premium-theme-options' );
+
 }
 
+// Post formats callback
+function premium_post_format_callback( $input ) {
+    return $input;
+}
+
+function premium_theme_options() {
+    echo 'Activate and Deactivate specific Theme Support Options';
+}
+
+function premium_post_formats() {
+    $options = get_option( 'post_formats' );
+    $formats = array( 'aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat' );
+    $output = '';
+    foreach ( $formats as $format ) {
+        $checked = ( @$options[$format] == 1 ? 'checked' : '' );
+        $output .= '<label><input type="checkbox" id="'.$format.'" name="post_formats['.$format.']" value="1" '.$checked.'>'.$format.'</label><br>';
+    }
+    echo $output;
+
+}
+
+// Sidebar Options Functions
 function premium_sidebar_options() {
     echo 'Customize Your Sidebar Information';
+}
+
+function premium_sidebar_profile() {
+    $picture = esc_attr(get_option( 'profile_picture' ));    
+    echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button" /><input id="profile-picture" type="hidden" name="profile_picture" value="'.$picture.'" />';
 }
 
 function premium_sidebar_name() {
@@ -48,6 +88,8 @@ function premium_sidebar_name() {
     echo '<input type="text" name="first_name" value="'.$firstName.'" placeholder="First Name" />' .
     '<input type="text" name="last_name" value="'.$lastName.'" placeholder="Last Name" />';
 }
+
+
 
 function premium_sidebar_description() {
     $description = esc_attr(get_option( 'user_description' ));    
@@ -76,6 +118,7 @@ function sunset_sanitize_twitter_handler( $input ) {
       return $output;  
 }
 
+//Template submenu functions
 function premium_theme_create_page() {
     
     require_once( get_template_directory() . '/inc/templates/premium-admin.php' );
@@ -86,4 +129,8 @@ function premium_theme_css_page() {
 
     echo '<h1>Premium Custom CSS</h1>';
 
+}
+
+function premium_theme_support_page() {
+    require_once( get_template_directory() . '/inc/templates/premium-theme-support.php' );
 }
