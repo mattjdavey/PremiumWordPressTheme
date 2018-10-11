@@ -25,6 +25,6 @@
 
     <?php settings_fields('premium-settings-group'); ?>
     <?php do_settings_sections('premium'); ?>
-    <?php submit_button(); ?>
+    <?php submit_button('Save Changes', 'primary','btnSubmit'); ?>
 
 </form>

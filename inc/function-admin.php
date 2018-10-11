@@ -14,9 +14,9 @@ function premium_add_admin_page() {
     // Generate premium admin sub pages.
     add_submenu_page('premium', 'Premium Sidebar Options', 'Sidebar', 'manage_options', 'premium', 'premium_theme_create_page');
     add_submenu_page('premium', 'Premium Theme Options', 'Theme Options', 'manage_options', 'premium_theme', 'premium_theme_support_page');
+    add_submenu_page('premium', 'Premium Contact Form', 'Contact Form', 'manage_options', 'premium_theme_contact', 'premium_theme_contact_form_page');
     add_submenu_page('premium', 'Premium CSS Options', 'Custom CSS', 'manage_options', 'premium_css', 'premium_theme_css_page');
     
-
     // Activate custom settings.
     add_action( 'admin_init', 'premium_custom_settings' );
 
@@ -43,21 +43,38 @@ function premium_custom_settings() {
     add_settings_field('sidebar-gplus', 'Google+ Handler', 'premium_sidebar_gplus', 'premium', 'premium-sidebar-options');
 
     // Theme support options.
-    register_setting( 'premium-theme-support', 'post_formats', 'premium_post_format_callback' );
+    register_setting( 'premium-theme-support', 'post_formats' );
+    register_setting( 'premium-theme-support', 'custom_header' );
+    register_setting( 'premium-theme-support', 'custom_background' );
 
     add_settings_section('premium-theme-options', 'Theme Options', 'premium_theme_options', 'premium_theme');
 
     add_settings_field( 'post-formats', 'Post Formats', 'premium_post_formats', 'premium_theme', 'premium-theme-options' );
+    add_settings_field( 'custom-header', 'Custom Header', 'premium_custom_header', 'premium_theme', 'premium-theme-options' );
+    add_settings_field( 'custom-background', 'Custom Background', 'premium_custom_background', 'premium_theme', 'premium-theme-options' );
 
-}
+    // Contact form options.
+    register_setting( 'premium-contact-options', 'activate_contact' );
 
-// Post formats callback
-function premium_post_format_callback( $input ) {
-    return $input;
+    add_settings_section( 'premium-contact-section', 'Contact Form', 'premium_contact_section', 'premium_theme_contact' );
+
+    add_settings_field( 'activate-form', 'Activate Contact Form', 'premium_activate_contact', 'premium_theme_contact', 'premium-contact-section' );
+
 }
 
 function premium_theme_options() {
     echo 'Activate and Deactivate specific Theme Support Options';
+}
+
+function premium_contact_section() {
+    echo 'Activate and Deactivate the Built-in contact form.';
+}
+
+function premium_activate_contact() {
+    $options = get_option( 'activate_contact' );
+    $checked = ( @$options == 1 ? 'checked' : '' );
+    $output .= '<label><input type="checkbox" id="activate_contact" name="activate_contact" value="1" '.$checked.'>Activate the Contact Form</label><br>';
+    echo $output;
 }
 
 function premium_post_formats() {
@@ -72,14 +89,36 @@ function premium_post_formats() {
 
 }
 
+function premium_custom_header() {
+    $options = get_option( 'custom_header' );
+    $checked = ( @$options == 1 ? 'checked' : '' );
+    $output .= '<label><input type="checkbox" id="custom_header" name="custom_header" value="1" '.$checked.'>Activate Custom Header</label><br>';
+    echo $output;
+
+}
+
+function premium_custom_background() {
+    $options = get_option( 'custom_background' );
+    $checked = ( @$options == 1 ? 'checked' : '' );
+    $output .= '<label><input type="checkbox" id="custom_background" name="custom_background" value="1" '.$checked.'>Activate Custom Background</label><br>';
+    echo $output;
+
+}
+
 // Sidebar Options Functions
 function premium_sidebar_options() {
     echo 'Customize Your Sidebar Information';
 }
 
 function premium_sidebar_profile() {
-    $picture = esc_attr(get_option( 'profile_picture' ));    
-    echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button" /><input id="profile-picture" type="hidden" name="profile_picture" value="'.$picture.'" />';
+
+    $picture = esc_attr(get_option( 'profile_picture' )); 
+    if( empty($picture) ) {
+        echo '<input type="button" class="button button-secondary" value="Upload Profile Picture" id="upload-button" /><input id="profile-picture" type="hidden" name="profile_picture" value="" />';
+    } else {
+        echo '<input type="button" class="button button-secondary" value="Replace Profile Picture" id="upload-button" /><input id="profile-picture" type="hidden" name="profile_picture" value="'.$picture.'" /> <input type="button" class="button button-secondary" value="Remove" id="remove-picture" /><input id="profile-picture" type="hidden" name="profile_picture" value="" ';
+    }
+    
 }
 
 function premium_sidebar_name() {
@@ -133,4 +172,8 @@ function premium_theme_css_page() {
 
 function premium_theme_support_page() {
     require_once( get_template_directory() . '/inc/templates/premium-theme-support.php' );
+}
+
+function premium_theme_contact_form_page() {
+    require_once( get_template_directory() . '/inc/templates/premium-contact-form.php' );
 }
