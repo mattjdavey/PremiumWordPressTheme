@@ -73,7 +73,7 @@ function premium_contact_section() {
 function premium_activate_contact() {
     $options = get_option( 'activate_contact' );
     $checked = ( @$options == 1 ? 'checked' : '' );
-    $output .= '<label><input type="checkbox" id="activate_contact" name="activate_contact" value="1" '.$checked.'>Activate the Contact Form</label><br>';
+    $output .= '<label><input type="checkbox" id="activate_contact" name="activate_contact" value="1" '.$checked.'></label><br>';
     echo $output;
 }
 
