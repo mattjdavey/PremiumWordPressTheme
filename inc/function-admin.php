@@ -60,6 +60,25 @@ function premium_custom_settings() {
 
     add_settings_field( 'activate-form', 'Activate Contact Form', 'premium_activate_contact', 'premium_theme_contact', 'premium-contact-section' );
 
+    // Custom CSS Options
+    register_setting( 'premium-custom-css-options', 'premium_css', 'premium_sanitize_custom_css' );
+
+    add_settings_section( 'premium-custom-css-section', 'Custom CSS', 'premium_custom_css_section_callback', 'premium_css');
+
+    add_settings_field( 'custom-css', 'Insert your Custom CSS', 'premium_custom_css_callback', 'premium_css', 'premium-custom-css-section' );
+
+}
+
+// Custom CSS Functions
+function premium_custom_css_section_callback() {
+    echo 'Customize premium theme with your own css.';
+}
+
+function premium_custom_css_callback() {
+    $css = get_option( 'premium_css' );  
+    $css = ( empty($css) ? '/* Premium Theme Custom CSS */' : $css );
+    echo '<div id="customCss">'.$css.'</div><textarea id="premium_css" name="premium_css" style="display:none;visibility:hidden;">'.$css.'</textarea>';
+    
 }
 
 function premium_theme_options() {
@@ -110,6 +129,8 @@ function premium_sidebar_options() {
     echo 'Customize Your Sidebar Information';
 }
 
+
+
 function premium_sidebar_profile() {
 
     $picture = esc_attr(get_option( 'profile_picture' )); 
@@ -151,10 +172,15 @@ function premium_sidebar_gplus() {
 }
 
 // Sanitization settings
-function sunset_sanitize_twitter_handler( $input ) {
+function premium_sanitize_twitter_handler( $input ) {
       $output = sanitize_text_field( $input );
       $output = str_replace('@', '', $output);
       return $output;  
+}
+
+function premium_sanitize_custom_css( $input ) {
+    $output = esc_textarea( $input );    
+    return $output;  
 }
 
 //Template submenu functions
@@ -166,7 +192,7 @@ function premium_theme_create_page() {
 
 function premium_theme_css_page() {
 
-    echo '<h1>Premium Custom CSS</h1>';
+    require_once( get_template_directory() . '/inc/templates/premium-custom-css.php' );
 
 }
 
@@ -177,3 +203,6 @@ function premium_theme_support_page() {
 function premium_theme_contact_form_page() {
     require_once( get_template_directory() . '/inc/templates/premium-contact-form.php' );
 }
+
+
+
