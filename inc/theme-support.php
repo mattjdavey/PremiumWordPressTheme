@@ -75,10 +75,48 @@ function premium_posted_footer() {
         } else {
             $comments = __('1 Comment');
         }
-        $comments = '<a href="'. get_comments_link() .'">' . $comments . ' <span class="fa fa-comments"></span></a>';
+        $comments = '<a class="comments-link" href="'. get_comments_link() .'">' . $comments . ' <span class="premium-icon fa fa-comments"></span></a>';
     } else {
         $comments = __('Comments are closed');
     }
 
-    return '<div class="post-footer-container"><div class="row"><div class="col-xs-12 col-sm-6">'. get_the_tag_list( '<div class="tags-list"><span class="fa fa-tags"></span> ', ' ', '</div>') .'</div><div class="col-xs-12 col-sm-6">'. $comments .'</div></div></div>';
+    return '<div class="post-footer-container"><div class="row"><div class="col-xs-12 col-sm-6">'. get_the_tag_list( '<div class="tags-list"><span class="premium-icon fa fa-tags"></span> ', ' ', '</div>') .'</div><div class="col-xs-12 col-sm-6 text-right">'. $comments .'</div></div></div>';
 }
+
+function premium_get_attachment() {
+    $output = '';
+    if (has_post_thumbnail() ) :
+        $output = wp_get_attachment_url( get_post_thumbnail_id( get_the_ID() ) );
+    else:            
+        $attachments = get_posts( array(
+            'post_type'     => 'attachment',
+            'posts_per_page'   => 1,
+            'post_parent'  => get_the_ID()
+        ));
+    
+        if( $attachments ):
+            foreach ( $attachments as $attachment ):
+                $output = wp_get_attachment_url( $attachment->ID );
+            endforeach;    
+        endif;
+
+        wp_reset_postdata();
+    endif;
+    return $output;
+}
+
+function premium_get_embedded_media( $type = array() ) {
+
+    $content = do_shortcode( apply_filters('the_content', get_the_content() ) );
+    $embed = get_media_embedded_in_content( $content, $type);
+
+    if ( in_array( 'audio', $type ) ):
+        $output = str_replace( '?visual=true', '?visual=false', $embed[0]); 
+    else:
+        $output = $embed[0];
+    endif;
+    return $output;
+
+
+}
+    
