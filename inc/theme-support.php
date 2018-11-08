@@ -83,21 +83,23 @@ function premium_posted_footer() {
     return '<div class="post-footer-container"><div class="row"><div class="col-xs-12 col-sm-6">'. get_the_tag_list( '<div class="tags-list"><span class="premium-icon fa fa-tags"></span> ', ' ', '</div>') .'</div><div class="col-xs-12 col-sm-6 text-right">'. $comments .'</div></div></div>';
 }
 
-function premium_get_attachment() {
+function premium_get_attachment( $num = 1 ) {
     $output = '';
-    if (has_post_thumbnail() ) :
+    if (has_post_thumbnail() && $num == 1 ) :
         $output = wp_get_attachment_url( get_post_thumbnail_id( get_the_ID() ) );
     else:            
         $attachments = get_posts( array(
             'post_type'     => 'attachment',
-            'posts_per_page'   => 1,
+            'posts_per_page'   => $num,
             'post_parent'  => get_the_ID()
         ));
     
-        if( $attachments ):
+        if( $attachments & $num == 1 ):
             foreach ( $attachments as $attachment ):
                 $output = wp_get_attachment_url( $attachment->ID );
-            endforeach;    
+            endforeach;  
+        elseif( $attachments && $num > 1 ):
+            $output = $attachments;
         endif;
 
         wp_reset_postdata();
@@ -117,6 +119,30 @@ function premium_get_embedded_media( $type = array() ) {
     endif;
     return $output;
 
+}
 
+function premium_get_bs_slides( $attachments ) {
+    
+    $output = array();
+    $count = count($attachments)-1;	
+
+    for( $i = 0; $i <= $count; $i++ ): 
+        $active = ( $i == 0 ? ' active' : '' );
+        
+        $n = ( $i == $count ? 0 : $i+1 );
+        $nextImg = wp_get_attachment_thumb_url( $attachments[$n]->ID );
+        $p = ( $i == 0 ? $count : $i-1 );
+        $prevImg = wp_get_attachment_thumb_url( $attachments[$p]->ID );
+
+        $output[$i] = array( 
+            'class'     => $active,
+            'url'       => wp_get_attachment_url( $attachments[$i]->ID ),
+            'next_img'  => $nextImg,
+            'prev_img'  => $prevImg,
+            'caption'   => $attachments[$i]->post_excerpt
+        );
+    endfor;
+    
+    return $output;
 }
     

@@ -23,34 +23,34 @@
 
     <body <?php body_class(); ?> >
 
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-xs-12">
-                    <header class="header-container background-image text-center" style="background-image: url(<?php header_image(); ?>">
-                        
-                        <div class="header-content table">
-                            <div class="table-cell">
-                                <h1 class="site-title"><?php bloginfo( 'name' ); ?></h1>
-                                <h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
-                            </div>
+              
+                <header class="header-container background-image text-center" style="background-image: url(<?php header_image(); ?>">
+                    
+                    <div class="header-content table">
+                        <div class="table-cell">
+                            <h1 class="site-title"><?php bloginfo( 'name' ); ?></h1>
+                            <h2 class="site-description"><?php bloginfo( 'description' ); ?></h2>
                         </div>
-                        <div class="nav-container">
+                    </div>
+                    <div class="nav-container">
 
-                            <nav class="navbar navar-default navbar-premium">
-                                <?php                                         
-                                    wp_nav_menu( array(
-                                        'theme_location'    => 'primary',
-                                        'container'         => false,
-                                        'menu_class'        => 'nav navbar-nav',
-                                        'walker'            => new Premium_Walker_Nav_Primary()
-                                    ) );
-                                ?>
-                            </nav>
+                        <nav class="navbar navar-default navbar-premium">
+                            <?php                                         
+                                wp_nav_menu( array(
+                                    'theme_location'    => 'primary',
+                                    'container'         => false,
+                                    'menu_class'        => 'nav navbar-nav',
+                                    'walker'            => new Premium_Walker_Nav_Primary()
+                                ) );
+                            ?>
+                        </nav>
 
-                        </div>
+                    </div>
 
-                    </header>
-                </div>
+                </header>
+            
             </div>
         </div>
 
