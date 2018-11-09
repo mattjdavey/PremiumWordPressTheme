@@ -376,7 +376,7 @@ h1 {
 			a {
 				display: block;
 			}
-			
+
 			.link-icon {
 				display: block;
 				color: #fff;
@@ -393,3 +393,39 @@ h1 {
 
 	}
 }	
+
+/* 
+	Aside Post Format 
+	------------------------------------------------
+*/
+.premium-format-aside {
+
+	.aside-container {
+		background-color: rgba(0,0,0,0.075);
+		padding-top: 20px;
+	}
+
+	.aside-featured {
+		width: 136px;
+		height: 126px;
+		border-radius: 50%;
+		margin: 0 auto -20px;
+	}
+
+	.entry-meta {
+		margin-bottom: 5px;
+	}
+
+	.entry-excerpt {
+		margin-top: 0;
+		p {
+			font-size: 15px;
+		}
+	}
+
+	.entry-footer {
+		border-bottom: none;
+		background-color: rgba(0,0,0,0.05);
+		padding-right: 10px;
+	}
+}
