@@ -100,10 +100,7 @@ a {
 	Standard Post
 	------------------------------------------------
 */
-article {
-	&:first-child {
-		padding-top: 80px;
-	}
+article {	
 	padding-top: 40px;
 	padding-bottom: 40px;
 }
@@ -428,4 +425,73 @@ h1 {
 		background-color: rgba(0,0,0,0.05);
 		padding-right: 10px;
 	}
+}
+
+/* 
+	Footer Section
+	------------------------------------------------
+*/
+.premium-footer {
+	background-color: #333;
+	padding: 20px 0;
+	margin-top: 40px;
+	display: block;
+}
+
+/* 
+	Ajax Loading
+	------------------------------------------------
+*/
+.container-load-previous {
+	margin-top: 40px;
+	margin-bottom: -40px;
+}
+
+.premium-posts-container {	
+	padding-top: 40px;
+
+	article {
+		@include animate( all, 320ms );
+		@include transform( translateY(100px) );
+		opacity: 0;
+
+		&.reveal {
+			@include transform( translateY(0) );
+			opacity: 1;
+		}
+
+	}
+}
+
+.btn-premium-load {
+	display: block;
+	width: 200px;
+	color: #222;
+	font-size: 30px;
+	margin: 0 auto;
+	cursor: pointer;
+	opacity: 0.5;
+	@include animate( opacity, 320ms );
+
+	&:hover,
+	&:focus,
+	&.loading {
+		opacity: 1;		
+	}
+
+	&.loading {
+		cursor: default;
+	}
+
+	span {
+		display: block;
+	}
+
+}
+
+.spin {
+	animation-name: spin;
+	animation-duration: 1000ms;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
 }

@@ -1,8 +1,11 @@
 <?php 
 /*
 @package premiumtheme
--- Standard Post Format
+-- Aside Post Format
 */
+
+//$class = get_query_var( 'post-class' );
+
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'premium-format-aside' ); ?>>
